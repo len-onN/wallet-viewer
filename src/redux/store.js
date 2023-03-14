@@ -1,14 +1,11 @@
-import { legacy_createStore as createStore, combineReducers,
+import { legacy_createStore as createStore,
   applyMiddleware } from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
 import thunk from 'redux-thunk';
-
-import user from './reducers/user';
-
-const rootReducer = ({ user });
+import rootReducer from './reducers';
 
 const store = createStore(
-  combineReducers(rootReducer),
+  rootReducer,
   composeWithDevTools(applyMiddleware(thunk)),
 );
 
