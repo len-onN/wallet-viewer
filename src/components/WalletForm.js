@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { currenciesAction } from '../redux/actions';
+import { currenciesAction, saveExpenses } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
@@ -24,6 +24,25 @@ class WalletForm extends Component {
     dispatch(currenciesAction(currencies));
   };
 
+  expenseSaver = async () => {
+    const { dispatch } = this.props;
+    const { state } = this;
+    const currenciesUSDTJson = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const currencies = await currenciesUSDTJson.json();
+    delete currencies.USDT;
+    dispatch(saveExpenses({
+      ...state,
+      exchangeRates: currencies,
+    }));
+    this.setState({
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+    });
+  };
+
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({
@@ -42,6 +61,7 @@ class WalletForm extends Component {
           <input
             data-testid="value-input"
             id="expenses"
+            name="value"
             type="number"
             value={ value }
             onChange={ this.handleChange }
@@ -52,6 +72,7 @@ class WalletForm extends Component {
           <input
             data-testid="description-input"
             id="description"
+            name="description"
             type="text"
             value={ description }
             onChange={ this.handleChange }
@@ -109,6 +130,12 @@ class WalletForm extends Component {
             <option>Saúde</option>
           </select>
         </label>
+        <button
+          type="button"
+          onClick={ this.expenseSaver }
+        >
+          Adicionar despesas
+        </button>
 
       </div>
     );
