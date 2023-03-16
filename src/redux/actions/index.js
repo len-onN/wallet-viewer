@@ -18,3 +18,10 @@ export const saveExpenses = (payload) => ({
   type: SAVE_EXPENSES,
   payload,
 });
+
+export const BILL_DELETER = 'BILL_DELETER';
+
+export const billDeleter = (payload) => ({
+  type: BILL_DELETER,
+  payload,
+});

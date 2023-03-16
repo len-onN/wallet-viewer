@@ -1,4 +1,5 @@
-import { CURRENCY_ACTION, SAVE_EXPENSES } from '../actions/index';
+import { BILL_DELETER, CURRENCY_ACTION, SAVE_EXPENSES } from '../actions/index';
+import expensesSummer from '../../staff/expensesSummer';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -6,15 +7,6 @@ const INITIAL_STATE = {
   editor: false,
   idToEdit: 0,
   total: 0,
-};
-
-const expensesSummer = (payload) => {
-  const expensesSum = payload.expenses.reduce(((acc, cur) => {
-    const sum = cur.value * cur.exchangeRates[cur.currency].ask;
-    acc += sum;
-    return acc;
-  }), 0);
-  return expensesSum.toFixed(2);
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -31,6 +23,13 @@ const wallet = (state = INITIAL_STATE, action) => {
       total: parseFloat(
         expensesSummer({ expenses: [...state.expenses, action.payload] }),
       ),
+    };
+  case BILL_DELETER:
+    return {
+      ...state,
+      expenses: state.expenses.filter(({ id }) => id !== action.payload),
+      total: expensesSummer({ expenses: state
+        .expenses.filter(({ id }) => id !== action.payload) }),
     };
   default:
     return state;

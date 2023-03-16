@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Header extends Component {
+  shouldComponentUpdate(prevState) {
+    const { total } = this.props;
+    return (prevState.total !== total);
+  }
+
   render() {
     const { email, total } = this.props;
     return (
