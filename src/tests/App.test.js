@@ -27,3 +27,22 @@ test('Testes para página de Login', () => {
   expect(store.getState().wallet).toHaveProperty('currencies');
   screen.logTestingPlaygroundURL();
 });
+
+test('Testes para Wallet', async () => {
+  const initialEntries = ['/carteira'];
+  renderWithRouterAndRedux(<Routes />, { initialEntries });
+
+  const addExpensesBtn = screen.getByRole('button', { name: /adicionar despesa/i });
+  expect(addExpensesBtn).toBeInTheDocument();
+
+  const description = screen.getByRole('textbox', { name: /descrição/i });
+  userEvent.type(description, 'Testando');
+  await userEvent.click(addExpensesBtn);
+  const deleteBtn = await screen.findAllByRole('button', { name: /excluir/i });
+  expect(deleteBtn[0]).toBeInTheDocument();
+  expect(deleteBtn).toHaveLength(1);
+
+  await userEvent.click(deleteBtn[0]);
+  expect(deleteBtn[0]).not.toBeInTheDocument();
+  screen.logTestingPlaygroundURL();
+});
