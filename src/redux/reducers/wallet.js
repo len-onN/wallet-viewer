@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   expenses: [],
   editor: false,
   idToEdit: 0,
+  total: 0,
 };
 
 const expensesSummer = (payload) => {
@@ -12,8 +13,8 @@ const expensesSummer = (payload) => {
     const sum = cur.value * cur.exchangeRates[cur.currency].ask;
     acc += sum;
     return acc;
-  }), 0).toFixed(2);
-  return expensesSum;
+  }), 0);
+  return expensesSum.toFixed(2);
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -27,7 +28,9 @@ const wallet = (state = INITIAL_STATE, action) => {
         id: !state.expenses.length ? 0 : state.expenses.length,
         ...action.payload,
       }],
-      total: expensesSummer({ expenses: [...state.expenses, action.payload] }),
+      total: parseFloat(
+        expensesSummer({ expenses: [...state.expenses, action.payload] }),
+      ),
     };
   default:
     return state;
