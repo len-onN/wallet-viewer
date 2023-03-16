@@ -12,8 +12,8 @@ const expensesSummer = (payload) => {
     const sum = cur.value * cur.exchangeRates[cur.currency].ask;
     acc += sum;
     return acc;
-  }), 0);
-  return expensesSum.toFixed(2);
+  }), 0).toFixed(2);
+  return expensesSum;
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
